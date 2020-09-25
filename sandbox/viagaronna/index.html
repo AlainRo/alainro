@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Via Garonna</title>
+<link rel="stylesheet" type="text/css" href="./inspector.css">
+<body>
+  <div id="titre"></div>  
+  <div id="viewof-dist"></div>
+  <div id="carte" width=800 ></div>
+  <div id="tableau"></div>
+<script type="module">
+
+//import define from "https://api.observablehq.com/d/2eb731d21f5fe459.js?v=3"
+import define from  "https://api.observablehq.com/d/73fcdb76847367cc.js?v=3"
+//import {define} from "./viagaronna.js"
+import {Runtime, Library, Inspector} from "./runtime.js";
+
+
+const runtime = new Runtime();
+
+const main = runtime.module(define, name => {
+  if (name === "titre") 
+    return new Inspector(document.querySelector("#titre"))//(document.body);
+  if (name === "viewof dist")
+    return new Inspector(document.querySelector("#viewof-dist"))//(document.body)
+  if (name === "carte") 
+    return new Inspector(document.querySelector("#carte"))//(document.body);
+  if (name === "tableau") 
+    return new Inspector(document.querySelector("#tableau"))//(document.body);
+});
+
+//const main = runtime.module(define, Inspector.into(document.body));
+
+</script>

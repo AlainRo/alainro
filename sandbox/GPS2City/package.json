@@ -1,0 +1,15 @@
+{
+  "name": "@alainro/gps-to-city-in-france",
+  "main": "3af4febc1b602272@729.js",
+  "version": "729.0.0",
+  "homepage": "https://observablehq.com/@alainro/gps-to-city-in-france",
+  "author": {
+    "name": "Alain Roan",
+    "url": "https://observablehq.com/@alainro"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
+ No newline at end of file

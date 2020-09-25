@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8">
+
+<html>
+<head>
+	<title>Chantiers </title>
+
+    <link rel="stylesheet" type="css" href="leaflet.css"/>
+    <script src="d3.min.js"></script>
+    <script src="leaflet.js"></script>
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="easy-button.js"> </script>
+    <script src="d3tooltip.js"> </script>   
+    <script src="column-chart.js"></script>
+    <script src="decodechantiers.js"> </script>       
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        html, body, #map {
+            height: 100%;
+        }
+        rect {
+            cursor: default;
+        }
+        #panel {
+            color: DarkSlateGray ;
+            background-color: LightYellow;
+            border-radius: '3px';
+            font-family: "verdana";
+            font-size: "8px";
+        }
+        .tooltip {
+            color: DarkSlateGray ;
+            background-color: LightYellow;
+            border-radius: '3px';
+            font-family: "verdana";
+            font-size: "8px";
+        }
+
+        .leaflet-popup-content-wrapper .leaflet-popup-content,{
+            background-color: LightYellow;
+            visibility: hidden;
+        }
+
+        table .gene {
+            border-spacing: '0px';
+        }
+
+        tr {
+            height: '8px';
+        }
+
+        td {
+            width: '40px';
+            text-align: center;
+        }
+        a.leaflet-bar-part {
+            background: LightGray;       
+            color: black;  
+        }
+        a.leaflet-bar-part.active {
+            background: white;       
+            color: black;  
+        }
+
+        .watermark {
+            font-family: "verdana";
+            font-size: "200px";            
+        }
+        .graph rect {
+            stroke: steelblue;
+            fill-opacity: 1;
+            fill: steelblue;
+            shape-rendering: crispEdges;
+            opacity: 0.5;
+        }
+        rect:hover {
+            fill:red ;
+        }
+
+        .leaflet-bottom.leaflet-left {
+            bottom: 20px;
+            left: -40px;
+        }
+        #map {
+            margin-bottom: -20px;
+        }
+        #sliderContain {
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+            bottom:15px;
+        }
+        #slider {
+            margin-left: 60px;
+            width:60%;
+
+        }
+
+}
+    </style>
+
+</head>
+<body> 
+
+	<div id="map" ></div>
+    <div id="sliderContain" ></div>
+    <script src="map.js"> </script>   
+    <script src="chantiers.js"></script>
+   
+
+</body>
+</html>
+

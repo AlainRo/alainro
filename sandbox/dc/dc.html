@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang='en'> 
+<head>
+<meta charset='utf-8'> <title>Tableau de Bord à filtres</title>
+<script src='d3.min.js' type='text/javascript'></script>
+<script src='crossfilter.min.js' type='text/javascript'></script> 
+<script src='dc.min.js' type='text/javascript'></script>
+
+
+<script src='bootstrap.min.js' type='text/javascript'></script> 
+
+<link href='bootstrap.min.css' rel='stylesheet' type='text/css'>
+<link href='dc.css' rel='stylesheet' type='text/css'> 
+<style type="text/css"></style>
+</head>
+<body>
+
+<div class='container' id='main-container'>
+<div class='content'>
+<div class='container' style='font: 12px sans-serif;'>
+
+<h3>Historique des émissions de SMS</h3>
+<div class='row'>
+  <div class='span12'>
+    <div class="row">
+          <div id="dc-data-count">
+          <span class="filter-count"></span>  SMS sélectionnés parmi <span class="total-count"></span>  au total 
+          <a href="javascript:dc.filterAll(); dc.renderAll();">Reinit des filtres</a>
+        </div>
+  </div>
+      <div class='row'>
+        <div class='span6' id='dc-week-chart'>
+        <h4>par jour de la semaine</h4>
+        </div>
+        <div class='span6' id='dc-hour-chart'>
+        <h4>par heure dans la journée</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class='row'>
+    <div class='span12' id='dc-time-chart'>
+      <h4>nombre par jour </h4>
+    </div>
+  </div>
+
+
+
+
+
+</div>
+</div>
+<div>Pour explorer les données: selectionner/déselectionner les jours de la semaine, définir une fenêtre sur les graphes en clic gauche + glisser, ajuster avec les poignées. Déplacer les fenêtres en les faisant coulisser.
+  </div>
+</div>
+<script src="dcjs.js">
+
+</script>
+ 
+</body>
+</html>

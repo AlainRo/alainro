@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>GPS to City in France</title>
+<link rel="stylesheet" type="text/css" href="./inspector.css">
+<body>
+    <div id="viewof-NbPoints"></div>  
+    <div id="carte" width=800 ></div>
+    <div id="tableau"></div>
+<script type="module">
+
+import define from "https://api.observablehq.com/@alainro/gps-to-city-in-france.js?v=3";
+import {Runtime, Library, Inspector} from "./runtime.js";
+
+const runtime = new Runtime();
+const main = runtime.module(define, name => {
+  
+  if (name === "carte") 
+    return new Inspector(document.querySelector("#carte"))//(document.body);
+  
+  if (name === "viewof NbPoints")
+    return new Inspector(document.querySelector("#viewof-NbPoints"))//(document.body)
+
+});
+</script>

@@ -1,0 +1,14 @@
+{
+  "name": "@alainro/perception-illusion-part-ii",
+  "main": "0b923c74bb754f1a@236.js",
+  "version": "236.0.0",
+  "homepage": "https://observablehq.com/@alainro/perception-illusion-part-ii",
+  "author": {
+    "name": "Alain Roan",
+    "url": "https://observablehq.com/@alainro"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}

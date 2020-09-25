@@ -1,0 +1,14 @@
+{
+  "name": "69c33ed283cfabf7",
+  "main": "69c33ed283cfabf7@860.js",
+  "version": "860.0.0",
+  "homepage": "https://observablehq.com/d/69c33ed283cfabf7",
+  "author": {
+    "name": "Alain Roan",
+    "url": "https://observablehq.com/@alainro"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}

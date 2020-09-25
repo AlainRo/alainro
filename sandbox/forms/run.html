@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        position: relative;
+    }
+
+    svg {
+
+        position: center;
+    }
+
+    .toolTip {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        position: absolute;
+        display: none;
+        width: auto;
+        height: auto;
+        background: none repeat scroll 0 0 white;
+        border: 0 none;
+        border-radius: 8px 8px 8px 8px;
+        box-shadow: -3px 3px 15px #888888;
+        color: black;
+        font: 12px sans-serif;
+        padding: 5px;
+        text-align: center;
+    }
+    .question {
+        font-family: "Verdana", Helvetica, Arial, sans-serif;
+        font-size: 20px;
+        text-align: left;
+    }
+
+    text {
+        font: 12px sans-serif;
+        color: white;
+    }
+    text.value {
+        font-size: 120%;
+        fill: white;
+    }
+
+    .axisHorizontal path{
+        fill: none;
+    }
+
+    .axisHorizontal .tick line {
+        stroke-width: 1;
+        stroke: rgba(0, 0, 0, 0.2);
+    }
+
+    .bar {
+        fill: steelblue;
+        fill-opacity: .9;
+    }
+
+    .bar text {
+        fill: #fff;
+        font: 12px sans-serif;
+    }
+
+    text .label {
+        fill: #000;
+        font: 12px sans-serif;
+    }
+
+  .legend {
+    font-size: 20px;
+  }
+
+  .number {
+    font-size: 20px;
+  }
+
+  rect {
+    stroke-width: 2;
+  }
+
+  .map {
+    width: 800px;
+    height: 500px;
+    position: center;
+    margin: auto;
+    padding: auto;
+}
+
+.stations, .stations svg {
+  position: absolute;
+}
+
+.stations svg {
+  width: 60px;
+  height: 20px;
+  padding-right: 100px;
+  font: 10px sans-serif;
+}
+
+.stations circle {
+  fill: red;
+  stroke: black;
+  opacity: 0.6;
+  stroke-width: 1.5px;
+}
+
+.diagram {
+    min-width: 800px;
+}
+
+</style>
+<body>
+<script src="//maps.google.com/maps/api/js?key=AIzaSyAbm_nnaN3lqupg3mY6WnWxMSMG3vaNLz0"></script>
+<script src="tabletop.js"></script>
+<script src="bundle.js"></script>
+
+
+</body>

@@ -1,0 +1,22 @@
+<div>
+Coller le lien ici:
+<input id="formID" type="text" size= "60"  oninput= 'debugger; console.log("validkey");var googlekey = document.getElementById("formID").value;console.log(googlekey);console.log(document.getElementById("reportlink"));var link = googlekey.match("d\\/(.*?)\\/edit")[1];if (!link) return;document.getElementById("reportlink").href = "https://perceptible.fr/sandbox/forms/run.html?key=" + link;document.getElementById("reportlink").target ="\"_blank\"";document.getElementById("reportlink").textContent =  "/sandbox/forms/run.html?key=" + link;'/>
+</div>
+<span>
+Vous pouvez consulter votre rapport là:
+<a id = 'reportlink' href=''> lien invalide</a>
+</span>
+<script>
+	// Ne passe pas à Jsx-parser
+function validatekey(){
+	console.log('validkey');
+	var googlekey = document.getElementById('formID').value;
+	console.log(googlekey);
+	console.log(document.getElementById('reportlink'));
+	var link = googlekey.match('d\\/(.*?)\\/edit')[1];
+	if (!link) return;
+	    document.getElementById('reportlink').href = '/sandbox/forms/run.html?key=' + link;
+	    document.getElementById('reportlink').textContent =  '/sandbox/run.html?key=' + link;
+
+}
+</script>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang='en'> 
+<head>
+<meta charset='utf-8'> <title>Tableau de Bord à filtres</title>
+<script src='d3.min.js' type='text/javascript'></script>
+<script src='crossfilter.min.js' type='text/javascript'></script> 
+<script src='dc.min.js' type='text/javascript'></script>
+
+
+<script src='bootstrap.min.js' type='text/javascript'></script> 
+
+<link href='bootstrap.min.css' rel='stylesheet' type='text/css'>
+<link href='dc.css' rel='stylesheet' type='text/css'> 
+<style type="text/css"></style>
+</head>
+<body>
+
+<div class='container' id='main-container'>
+<div class='content'>
+<div class='container' style='font: 12px sans-serif;'>
+
+<h3>Historique des émissions de SMS</h3>
+<div class='row'>
+  <div class='span12'>
+    <div class="row">
+          <div id="dc-data-count">
+          <span class="filter-count"></span>  SMS sélectionnés parmi <span class="total-count"></span>  au total 
+          <a href="javascript:dc.filterAll(); dc.renderAll();">Reinit des filtres</a>
+        </div>
+  </div>
+      <div class='row'>
+        <div class='span6' id='dc-week-chart'>
+        <h4>par jour de la semaine</h4>
+        </div>
+        <div class='span6' id='dc-hour-chart'>
+        <h4>par heure dans la journée</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class='row'>
+    <div class='span12' id='dc-time-chart'>
+      <h4>nombre par jour </h4>
+    </div>
+  </div>
+
+
+
+
+
+</div>
+</div>
+<div>Pour explorer les données: selectionner/déselectionner les jours de la semaine, définir une fenêtre sur les graphes en clic gauche et glisser, ajuster ou déplacer les fenêtres en les faisant glisser.
+  </div>
+</div>
+<script>
+//IE9
+if (!Array.prototype.forEach) {
+    Array.prototype.forEach = function (fn, scope) {
+        'use strict';
+        var i, len;
+        for (i = 0, len = this.length; i < len; ++i) {
+            if (i in this) {
+                fn.call(scope, this[i], i, this);
+            }
+        }
+    };
+}
+/*
+ window.onload = function() {getGoogle();};
+ function getGoogle() {
+    Tabletop.init( { key: '0AiAyoEbUuwl7dE5vOV9uczNweFBnSnJGaVBJVm5zQmc',
+                     callback: function(data,tabletop) {console.log(data);
+                      drawdashboard(data);},
+                     simpleSheet: true,
+                     parseNumbers: true
+                     }
+                      );
+      };
+    */ 
+/**********************************
+* Step0: Load data from json file *
+**********************************/
+
+// load data from a csv file
+//d3.csv("quakes.csv", function (data) {
+d3.csv("tel.csv", function (error, data) {
+//function drawdashboard (data) {
+  // format our data
+//  var dtgFormat = d3.time.format("%Y-%m-%dT%H:%M:%S");
+  var dtgFormat = d3.time.format("%d/%m/%yT%H:%M:%S");
+  var semFormat = d3.scale.ordinal()
+    .domain([1,2,3,4,5,6,7])
+    .range(["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"]);
+
+  data.forEach(function(d) { 
+    d.dtg   = dtgFormat.parse(d.origintime); 
+    //d.lat   = +d.latitude;
+    //d.long  = +d.longitude;
+    d.mag   = d3.round(+d.nb,0);
+    d.sem   = d3.round(+d.semaine,0);
+    //d.depth = d3.round(+d.depth,0);
+  });
+
+/******************************************************
+* Step1: Create the dc.js chart objects & ling to div *
+******************************************************/
+
+  //var magnitudeChart = dc.barChart("#dc-magnitude-chart");
+  var hourChart = dc.barChart("#dc-hour-chart");
+  var weekChart = dc.rowChart("#dc-week-chart");
+  var timeChart = dc.barChart("#dc-time-chart");
+  //var dataTable = dc.dataTable("#dc-table-graph");
+  var datacounter = dc.dataCount("#dc-data-count");
+
+/****************************************
+*   Run the data through crossfilter    *
+****************************************/
+
+  var facts = crossfilter(data);  // Gets our 'facts' into crossfilter
+  var all = facts.groupAll();
+
+/******************************************************
+* Create the Dimensions                               *
+* A dimension is something to group or filter by.     *
+* Crossfilter can filter by exact value, or by range. *
+******************************************************/
+
+  // for Magnitude
+  var magValue = facts.dimension(function (d) {
+    return d.mag;       // group or filter by magnitude
+  });
+  var magValueGroupSum = magValue.group()
+    .reduceSum(function(d) { return d.mag; });  // sums the magnitudes per magnitude
+  var magValueGroupCount = magValue.group()
+    .reduceCount(function(d) { return d.mag; }) // counts the number of the facts by magnitude
+
+  // For datatable
+  var timeDimension = facts.dimension(function (d) {
+    return d.dtg;
+  }); // group or filter by time
+
+  // for Depth
+  /*var depthValue = facts.dimension(function (d) {
+    return d.depth;
+  });
+  var depthValueGroup = depthValue.group();
+  */
+  // define a daily volume Dimension
+  var volumeByDay = facts.dimension(function(d) {
+    var nd = new Date(d.dtg)
+    var h = new Date(nd.getFullYear(), nd.getMonth(), nd.getDate());
+    return h;
+  });
+  // map/reduce to group sum
+  var volumeByDayGroup = volumeByDay.group()
+    .reduceSum(function(d) { return d.mag;});
+
+ // define an hourly Dimension
+ var volumeByHour = facts.dimension(function(d) {
+    var h = new Date(d.dtg);
+    var r =h.getHours();
+    if (r>2 ){return r}
+    else {return r+24};
+  });   
+
+ var hourValueGroupCount = volumeByHour.group()
+    .reduceSum(function(d) { return d.mag;});
+
+/* essai de groupement avec percentage du total
+ var hourValueGroupCount = volumeByHour.group().reduce()
+// add
+  function(p,v) {
+      ++p.count;
+      p.sum += v.d;
+      return p;
+  },
+// remove
+  function (p,v) {
+      --p.count;
+      p.sum -= v.d;
+      return p;
+  },
+// init
+  function () {
+      count:0;
+      sum:0;
+
+  }
+  );  
+*/
+ var volumeByWeekDay = facts.dimension(function(d) {
+    return d.sem;
+  });
+   // map/reduce to group sum
+  var volumeByWeekDayGroup = volumeByWeekDay.group()
+    .reduceSum(function(d) { return d.mag;});
+
+/***************************************
+*   Step4: Create the Visualisations   *
+***************************************/
+/*  // Magnitide Bar Graph Summed
+  magnitudeChart.width(300)
+    .height(100)
+    .margins({top: 10, right: 10, bottom: 20, left: 40})
+    .dimension(magValue)                // the values across the x axis
+    .group(magValueGroupSum)              // the values on the y axis
+  .transitionDuration(500)
+    .centerBar(true)  
+  .gap(10)                                            // bar width Keep increasing to get right then back off.
+    .x(d3.scale.linear().domain([0.5, 7.5]))
+  .elasticY(true)
+  .xAxis().tickFormat(function(v) {return v;}); 
+*/
+  // Depth bar graph
+  hourChart.width(500)
+    .height(200)
+    .margins({top: 10, right: 10, bottom: 20, left: 40})
+    .dimension(volumeByHour)                // the values across the x axis
+    .group(hourValueGroupCount)              // the values on the y axis
+  .transitionDuration(500)
+    .centerBar(true)  
+  .gap(2)                                            // bar width Keep increasing to get right then back off.
+    .x(d3.scale.linear().domain([4, 27]))
+    //.x(d3.scale.ordinal()
+    //    .range(["3","4","5","6","7","8","9","10","11","12","13","14","15",//"16","17","18","19","20","21","22","23","0","1","2"]))
+
+  .elasticY(true)
+  .xAxis().tickFormat(function(v) {return v;});     
+ /* depthChart.width(480)
+    .height(150)
+    .margins({top: 10, right: 10, bottom: 20, left: 40})
+    .dimension(depthValue)
+    .group(depthValueGroup)
+  .transitionDuration(500)
+    .centerBar(true)  
+  .gap(1)                    // bar width Keep increasing to get right then back off.
+    .x(d3.scale.linear().domain([0, 100]))
+  .elasticY(true)
+  .xAxis().tickFormat(function(v) {return v;});
+*/
+  var dmin = new Date(volumeByDay.bottom(1)[0].dtg)
+  var dmax = new Date(volumeByDay.top(1)[0].dtg)
+  // time graph
+  timeChart.width(960)
+    .height(200)
+    .margins({top: 10, right: 10, bottom: 20, left: 40})
+    .dimension(volumeByDay)
+    .group(volumeByDayGroup)
+    .transitionDuration(500)
+    //.colors('red')
+    .centerBar(true) 
+    .gap(1)
+  .elasticY(true)
+    .x(d3.time.scale().domain([dmin, dmax])) // scale and domain of the graph
+    .xAxis();
+
+/*
+
+  // Table of earthquake data
+  dataTable.width(960).height(800)
+    .dimension(timeDimension)
+  .group(function(d) { return ""
+   })
+  .size(10)             // number of rows to return
+    .columns([
+      function(d) { return d.dtg; },
+     // function(d) { return d.lat; },
+     // function(d) { return d.long; },
+     // function(d) { return d.depth; },
+      function(d) { return d.mag; }
+    ])
+    .sortBy(function(d){ return d.dtg; })
+    .order(d3.ascending);
+
+*/
+
+    weekChart
+            .width(500) // (optional) define chart width, :default = 200
+            .height(200) // (optional) define chart height, :default = 200
+            .group(volumeByWeekDayGroup) // set group
+            .dimension(volumeByWeekDay) // set dimension;
+            .label(function(d){return semFormat(d.key);})
+            .elasticX(true)
+            ;//.x(d3.scale.linear().domain(['lundi', 'mardi','mercredi','jeudi','vendredi','samedi','dimanche']));
+
+    datacounter
+      .dimension(facts)
+      .group(all); 
+
+/****************************
+* Step6: Render the Charts  *
+****************************/
+      
+  dc.renderAll();
+  //d3.select("#dc-data-count").select(".filter-count").text("123");
+  
+});
+  
+</script>
+   
+</body>
+</html>
